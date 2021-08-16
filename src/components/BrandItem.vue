@@ -1,4 +1,5 @@
 <template>
+  <!-- Обычное отображение -->
   <article v-if="!isEditing" class="row">
     <div class="item-info">
       <span v-if="main" class="item-info__main">✅</span>
@@ -13,6 +14,7 @@
       <button @click.prevent="onDeleteClick">Delete</button>
     </div>
   </article>
+  <!-- Режим редактирования -->
   <form @submit.prevent="onSaveSubmit" v-else class="row">
     <div class="item-info">
       <input v-model="formMain" type="checkbox" class="item-info__main" />
@@ -64,17 +66,20 @@ export default defineComponent({
     const formMain = ref(false);
     const formError = ref(false);
 
+    //Установка флага ошибки при пустом поле тайтла во время редактирования
     watch(formTitle, (formTitle) => {
       if (!formTitle) formError.value = true;
       else formError.value = false;
     });
 
+    //Заполнение полей в режиме редактирования значениями из пропс
     onMounted(() => {
       formTitle.value = props.title;
       formMain.value = props.main;
       formError.value = false;
     });
 
+    //Установка флага редактирования в элементе стора
     const onEditClick = () => {
       const items = store.state.items.map((item: BrandItem) => {
         if (props._id === item._id) {
@@ -90,7 +95,6 @@ export default defineComponent({
       if (!confirm('Are you sure about that?')) {
         return;
       }
-
       store.dispatch(ActionType.DeleteBrandItem, props._id);
     };
 
@@ -98,12 +102,11 @@ export default defineComponent({
       if (formError.value) {
         return;
       }
-
+      //Сброс редактирования для неизмененных значений
       if (formTitle.value === props.title && formMain.value === props.main) {
         resetEditing();
         return;
       }
-
       store.dispatch(ActionType.UpdateBrandItem, {
         _id: props._id,
         data: { title: formTitle.value, main: formMain.value },
@@ -112,6 +115,7 @@ export default defineComponent({
 
     const onCancelClick = () => resetEditing();
 
+    //Сброс флагов редактирования всех элементов стора
     const resetEditing = () => {
       const items = store.state.items.map((item: BrandItem) => {
         return { ...item, isEditing: false };

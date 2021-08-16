@@ -15,16 +15,19 @@ import { defineComponent, ref, watch } from 'vue';
 export default defineComponent({
   setup() {
     const store = useStore();
+
     const title = ref('');
     const main = ref(false);
     const formError = ref(false);
 
+    //Установка флага ошибки при пустом поле тайтла
     watch(title, (title) => {
       if (!title) formError.value = true;
       else formError.value = false;
     });
 
     const onCreateSubmit = () => {
+      //Проверка для сабмита изначально пустого поля
       if (!title.value) {
         formError.value = true;
         return;

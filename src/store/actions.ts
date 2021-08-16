@@ -4,6 +4,7 @@ import { ActionContext, ActionTree } from 'vuex';
 import { Mutations, MutationType } from './mutations';
 import { BrandItem, State } from './state';
 
+//Перечисление ключей типов экшенов
 export enum ActionType {
   CreateBrandItem = 'CREATE_ITEM',
   ReadBrandItem = 'READ_ITEM',
@@ -12,6 +13,7 @@ export enum ActionType {
   GetBrandItems = 'GET_ITEMS',
 }
 
+//Тип контекста экшена с замененным коммитом с типами мутаций
 type ActionArguments = Omit<ActionContext<State, State>, 'commit'> & {
   commit<K extends keyof Mutations>(
     key: K,
@@ -19,6 +21,7 @@ type ActionArguments = Omit<ActionContext<State, State>, 'commit'> & {
   ): ReturnType<Mutations[K]>;
 };
 
+//Типы экшенов
 export type Actions = {
   [ActionType.CreateBrandItem](
     context: ActionArguments,
@@ -37,17 +40,23 @@ export type Actions = {
   [ActionType.GetBrandItems](context: ActionArguments): void;
 };
 
+//Реализация экшенов
 export const actions: ActionTree<State, State> & Actions = {
   async [ActionType.CreateBrandItem]({ commit }, payload) {
+    //Установка флага загрузки для лоадера
     commit(MutationType.SetLoading, true);
     try {
+      //Создание элемента
       await brandAPI.createItem(payload);
       const updatedItems = await brandAPI.getItems();
+      //Обновление списка элементов в сторе
       commit(MutationType.SetItems, updatedItems);
     } catch (error) {
+      //Хак для типизации ошибки в try catch с async/await
       const { response } = error as AxiosError;
       alert(`Error: ${response?.data || 'no info'}`);
     }
+    //Отключение флага загрузки
     commit(MutationType.SetLoading, false);
   },
 

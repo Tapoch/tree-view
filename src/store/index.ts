@@ -20,6 +20,7 @@ export const useStore = (): Store => {
   return store as Store;
 };
 
+//Тип стора с собственными мутациями и экшенами
 export type Store = Omit<
   VuexStore<State>,
   'getters' | 'commit' | 'dispatch'

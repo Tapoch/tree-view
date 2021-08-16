@@ -19,6 +19,7 @@ export default defineComponent({
     const items = computed(() => store.state.items);
     const isLoading = computed(() => store.state.isLoading);
     onMounted(() => {
+      //Запрос данных из апи
       store.dispatch(ActionType.GetBrandItems);
     });
     return { items, isLoading };
