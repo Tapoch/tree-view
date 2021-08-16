@@ -1,12 +1,12 @@
 <template>
-  <!-- Обычное отображение -->
   <article v-if="!isEditing" class="row">
     <div class="item-info">
-      <span v-if="main" class="item-info__main">✅</span>
-      <span v-html="title"></span>
+      <span v-html="title" title="Title" class="item-info__title"></span>
+      <span v-if="main" title="Main">✅</span>
       <span
         v-html="_id"
         style="margin-left: 8px; font-size: 10px; color: gray"
+        title="Id"
       ></span>
     </div>
     <div>
@@ -14,21 +14,27 @@
       <button @click.prevent="onDeleteClick">Delete</button>
     </div>
   </article>
-  <!-- Режим редактирования -->
   <form @submit.prevent="onSaveSubmit" v-else class="row">
     <div class="item-info">
-      <input v-model="formMain" type="checkbox" class="item-info__main" />
       <input
         v-model.trim="formTitle"
         :class="{ error: formError }"
         type="text"
       />
+      <label for="main">Main</label>
+      <input
+        v-model="formMain"
+        type="checkbox"
+        class="item-info__main"
+        id="main"
+      />
+
       <span
         v-html="_id"
         style="margin-left: 8px; font-size: 10px; color: gray"
       ></span>
     </div>
-    <div>
+    <div class="actions">
       <button>Save</button>
       <button @click.prevent="onCancelClick">Cancel</button>
     </div>
@@ -145,7 +151,20 @@ export default defineComponent({
 .row:nth-child(odd) {
   background: lightgray;
 }
-.item-info__main {
+.item-info__title {
   margin-right: 2px;
+}
+.actions {
+  display: flex;
+  align-items: flex-start;
+}
+form input {
+  padding: 2px 4px;
+  outline: none;
+  margin-right: 8px;
+  font-size: 14px;
+}
+form label {
+  margin-right: 4px;
 }
 </style>

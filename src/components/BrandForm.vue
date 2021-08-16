@@ -1,8 +1,14 @@
 <template>
   <form @submit.prevent="onCreateSubmit">
     <div>
-      <input v-model="main" type="checkbox" />
-      <input v-model.trim="title" :class="{ error: formError }" type="text" />
+      <input
+        v-model.trim="title"
+        :class="{ error: formError }"
+        type="text"
+        placeholder="Title"
+      />
+      <label for="main">Main</label>
+      <input v-model="main" type="checkbox" id="main" />
     </div>
     <button>Create</button>
   </form>
@@ -48,12 +54,20 @@ export default defineComponent({
 </script>
 <style scoped>
 form {
-  border: 1px solid lightgray;
   padding: 8px 2px;
   margin: 10px 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+form input {
+  padding: 2px 4px;
+  outline: none;
+  margin-right: 8px;
+  font-size: 14px;
+}
+form label {
+  margin-right: 4px;
 }
 div {
   display: flex;

@@ -1,5 +1,5 @@
 <template>
-  <h1>TreeView CRUD</h1>
+  <h1>CRUD</h1>
   <BrandList />
 </template>
 <script lang="ts">
