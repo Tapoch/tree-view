@@ -22,22 +22,12 @@
   </div>
   <div v-if="isLoading">Loading...</div>
   <div v-else-if="brandGroups.length">
-    <article v-for="group in brandGroups" :key="group.name">
-      <strong>{{ group.name }} ({{ group.items.length }})</strong>
-      <strong @click.prevent="onExpandClick(group.name)" class="toggle">
-        {{ group.isExpanded ? '>>' : '&lt;&lt;' }}
-      </strong>
-      <ul v-if="!group.isExpanded">
-        <li v-for="item in group.preview" :key="item.title">
-          - {{ item.title }} (main: {{ item.main }})
-        </li>
-      </ul>
-      <ul v-else>
-        <li v-for="item in group.items" :key="item.title">
-          - {{ item.title }} (main: {{ item.main }})
-        </li>
-      </ul>
-    </article>
+    <TreeViewItem
+      v-for="group in brandGroups"
+      :key="group.name"
+      v-bind="group"
+      @expand="onExpandClick"
+    />
   </div>
   <div v-else>Результат отсутствует</div>
 </template>
@@ -46,6 +36,7 @@ import { useStore } from '@/store';
 import { ActionType } from '@/store/actions';
 import { GetterType } from '@/store/getters';
 import { BrandItem } from '@/store/state';
+import TreeViewItem from '@/components/TreeViewItem.vue';
 import { computed, defineComponent, watch, onMounted, ref } from 'vue';
 
 type BrandGroup = {
@@ -57,6 +48,7 @@ type BrandGroup = {
 };
 
 export default defineComponent({
+  components: { TreeViewItem },
   setup() {
     const store = useStore();
 
@@ -164,17 +156,6 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-article {
-  margin: 8px auto;
-  border-bottom: 1px solid lightgray;
-}
-article:last-child {
-  border-bottom: none;
-  padding-bottom: 10px;
-}
-article > strong {
-  margin-right: 8px;
-}
 .filter {
   padding: 8px 0;
 }
@@ -204,8 +185,5 @@ article > strong {
 }
 .search > div {
   font-size: 12px;
-}
-.toggle {
-  cursor: pointer;
 }
 </style>
